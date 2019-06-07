@@ -24,13 +24,8 @@ class Url {
       throw new Error('invalid url format');
     }
     const domain = Url.getDomain(str);
-    try {
-      const isValidDomain = await Url.checkValidDomain(domain);
-      if (isValidDomain) {
-        return new Url(str);
-      }
-    } catch (err) {
-      throw new Error(err.message);
+    if (await Url.isValidDomain(domain)) {
+      return new Url(str);
     }
   }
 
@@ -44,7 +39,15 @@ class Url {
     return (str.match(domainFormat)[1]);
   }
 
-  static checkValidDomain(domain) {
+  static async isValidDomain(domain) {
+    try {
+      return await Url.dnsLookup(domain);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static dnsLookup(domain) {
     return new Promise((resolve, reject) => {
       dns.lookup(domain, err => {
         if (err) {
