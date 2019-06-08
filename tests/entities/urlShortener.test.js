@@ -1,42 +1,35 @@
-const Url = require('../../entities/url');
+const UrlShortener = require('../../entities/urlShortener');
 
-test('Creating Url with invalid format should throw exception', async () => {
+test('Invalid format URL should be invalid', async () => {
   expect.assertions(2);
   await urlShouldBeInvalid('ssh://test.com/');
   await urlShouldBeInvalid('http://***');
 });
 
 async function urlShouldBeInvalid(str) {
-  const invalidFormatMsg = 'invalid url format';
+  const isValid = await UrlShortener.isValidUrl(str);
+  expect(isValid).toEqual(false);
 
-  try {
-    await Url.createUrl(str)
-  } catch (e) {
-    expect(e.message).toEqual(invalidFormatMsg);
-  }
 }
 
-test('Creating Url with invalid domain should throw Error exception', () => {
+test('Url with invalid domain should be invalid', () => {
   const invalidDomain = 'www.not-a-valid-domain-7iuiui232.com';
-  const invalidDomainMsg = 'getaddrinfo ENOTFOUND ' + invalidDomain;
-
   expect.assertions(1);
-  return Url.createUrl('http://' + invalidDomain)
-    .catch(e => expect(e.message).toBe(invalidDomainMsg));
+  return expect(UrlShortener.isValidUrl('http://' + invalidDomain)).resolves.toBe(false);
 });
 
 
-test('Creating Url with valid format and domain should create a Url object', async () => {
+test('Url with valid format and domain should be valid', async () => {
   expect.assertions(4);
-  await validUrlShouldCreateUrlObject('http://www.google.com');
-  await validUrlShouldCreateUrlObject('http://www.amazon.com/extra/route/');
-  await validUrlShouldCreateUrlObject('http://microsoft.com/');
-  await validUrlShouldCreateUrlObject('http://github.com/site');
+  await urlShouldBeValid('http://www.google.com');
+  await urlShouldBeValid('http://www.amazon.com/extra/route/');
+  await urlShouldBeValid('http://microsoft.com/');
+  await urlShouldBeValid('http://github.com/site');
 });
 
-async function validUrlShouldCreateUrlObject(str) {
-  const url = await Url.createUrl(str);
-  expect(url).toEqual(new Url(str));
+async function urlShouldBeValid(str) {
+  const url = await UrlShortener.isValidUrl(str);
+  expect(url).toBe(true);
 }
 
 
