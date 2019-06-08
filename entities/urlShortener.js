@@ -1,6 +1,34 @@
 const dns = require('dns');
+const ShortenUrls = require('../dbModels/shortenUrls');
 
 class UrlShortener {
+  static async createKeyFromUrl(str) {
+    const isValid = await UrlShortener.isValidUrl(str);
+    if (isValid) {
+      const url = UrlShortener.removeLastSlash(str);
+      const existingKey = await ShortenUrls.findKeyByUrl(url);
+
+      if (existingKey) {
+        return existingKey;
+      } else {
+        return await ShortenUrls.add(url);
+      }
+    } else {
+      throw new Error('Invalid URL');
+    }
+  }
+
+  static retrieveUrlFromKey(key) {
+    if (this.isValidKey(key)) {
+      return ShortenUrls.retrieve(key);
+    } else {
+      throw new Error('URL not found.')
+    }
+  }
+
+  static isValidKey(key) {
+    return /\d{1,10}/.test(key);
+  }
 
   static removeLastSlash(url) {
     if (url.charAt(url.length - 1) === '/') {
