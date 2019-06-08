@@ -1,15 +1,6 @@
 const dns = require('dns');
 
-class Url {
-  /**
-   * Should call createUrl() instead of calling constructor
-   * directly. createUrl() will validate the provided string
-   * and return Url object if it is a valid url.
-   * @param str - valid url string
-   */
-  constructor(str) {
-    this.url = Url.removeLastSlash(str);
-  }
+class UrlShortener {
 
   static removeLastSlash(url) {
     if (url.charAt(url.length - 1) === '/') {
@@ -19,14 +10,12 @@ class Url {
     }
   }
 
-  static async createUrl(str) {
-    if (!Url.isValidFormat(str)) {
-      throw new Error('invalid url format');
+  static async isValidUrl(str) {
+    if (!UrlShortener.isValidFormat(str)) {
+      return false;
     }
-    const domain = Url.getDomain(str);
-    if (await Url.isValidDomain(domain)) {
-      return new Url(str);
-    }
+    const domain = UrlShortener.getDomain(str);
+    return (await UrlShortener.isValidDomain(domain));
   }
 
   static isValidFormat(str) {
@@ -41,9 +30,9 @@ class Url {
 
   static async isValidDomain(domain) {
     try {
-      return await Url.dnsLookup(domain);
+      return await UrlShortener.dnsLookup(domain);
     } catch (err) {
-      throw new Error(err.message);
+      return false;
     }
   }
 
@@ -60,4 +49,4 @@ class Url {
   }
 }
 
-module.exports = Url;
+module.exports = UrlShortener;
