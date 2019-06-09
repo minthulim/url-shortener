@@ -10,7 +10,8 @@ const shortenUrls = new Schema({
   },
   url: {
     type: String,
-    required: true
+    required: true,
+    max: 200
   }
 });
 

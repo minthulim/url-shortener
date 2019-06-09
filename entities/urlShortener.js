@@ -14,15 +14,20 @@ class UrlShortener {
         return await ShortenUrls.add(url);
       }
     } else {
-      throw new Error('Invalid URL');
+      throw new UrlShortenerError('Invalid URL');
     }
   }
 
-  static retrieveUrlFromKey(key) {
+  static async retrieveUrlFromKey(key) {
     if (this.isValidKey(key)) {
-      return ShortenUrls.retrieve(key);
+      const url = await ShortenUrls.retrieve(key);
+      if (url) {
+        return url;
+      } else {
+        throw new UrlShortenerError('URL not found.');
+      }
     } else {
-      throw new Error('URL not found.')
+      throw new UrlShortenerError('URL not found.');
     }
   }
 
@@ -77,4 +82,10 @@ class UrlShortener {
   }
 }
 
-module.exports = UrlShortener;
+class UrlShortenerError extends Error {
+  constructor(params) {
+    super(params);
+  }
+}
+
+module.exports = {UrlShortener, UrlShortenerError};
