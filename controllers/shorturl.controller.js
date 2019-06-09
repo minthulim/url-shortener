@@ -9,7 +9,7 @@ exports.addUrl = async function (req, res) {
       'short_url': key
     });
   } catch (e) {
-    handleError(e, res);
+    _handleError(e, res);
   }
 };
 
@@ -19,11 +19,11 @@ exports.processShortUrl = async function (req, res) {
     const url = await UrlShortener.retrieveUrlFromKey(key);
     return res.redirect(url);
   } catch (e) {
-    handleError(e, res);
+    _handleError(e, res);
   }
 };
 
-function handleError(e, res) {
+function _handleError(e, res) {
   if (e instanceof UrlShortenerError) {
     return res.json({'error': e.message});
   } else {

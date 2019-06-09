@@ -3,9 +3,9 @@ const ShortenUrls = require('../dbModels/shortenUrls');
 
 class UrlShortener {
   static async createKeyFromUrl(str) {
-    const isValid = await UrlShortener.isValidUrl(str);
+    const isValid = await UrlShortener._isValidUrl(str);
     if (isValid) {
-      const url = UrlShortener.removeLastSlash(str);
+      const url = UrlShortener._removeLastSlash(str);
       const existingKey = await ShortenUrls.findKeyByUrl(url);
 
       if (existingKey) {
@@ -19,7 +19,7 @@ class UrlShortener {
   }
 
   static async retrieveUrlFromKey(key) {
-    if (this.isValidKey(key)) {
+    if (this._isValidKey(key)) {
       const url = await ShortenUrls.retrieve(key);
       if (url) {
         return url;
@@ -31,11 +31,11 @@ class UrlShortener {
     }
   }
 
-  static isValidKey(key) {
+  static _isValidKey(key) {
     return /\d{1,10}/.test(key);
   }
 
-  static removeLastSlash(url) {
+  static _removeLastSlash(url) {
     if (url.charAt(url.length - 1) === '/') {
       return url.slice(0, -1);
     } else {
@@ -43,33 +43,33 @@ class UrlShortener {
     }
   }
 
-  static async isValidUrl(str) {
-    if (!UrlShortener.isValidFormat(str)) {
+  static async _isValidUrl(str) {
+    if (!UrlShortener._isValidFormat(str)) {
       return false;
     }
-    const domain = UrlShortener.getDomain(str);
-    return (await UrlShortener.isValidDomain(domain));
+    const domain = UrlShortener._getDomain(str);
+    return (await UrlShortener._isValidDomain(domain));
   }
 
-  static isValidFormat(str) {
+  static _isValidFormat(str) {
     const urlFormat = /https?:\/\/(\w{1,10}\.)?([\w-]{1,50})\.(\w{1,10})(\/[\w-]+)?\/?/;
     return urlFormat.test(str);
   }
 
-  static getDomain(str) {
+  static _getDomain(str) {
     const domainFormat = /https?:\/\/([^\/]+)/;
     return (str.match(domainFormat)[1]);
   }
 
-  static async isValidDomain(domain) {
+  static async _isValidDomain(domain) {
     try {
-      return await UrlShortener.dnsLookup(domain);
+      return await UrlShortener._dnsLookup(domain);
     } catch (err) {
       return false;
     }
   }
 
-  static dnsLookup(domain) {
+  static _dnsLookup(domain) {
     return new Promise((resolve, reject) => {
       dns.lookup(domain, err => {
         if (err) {

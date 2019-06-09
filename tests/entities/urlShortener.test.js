@@ -7,7 +7,7 @@ test('Invalid format URL should be invalid', async () => {
 });
 
 async function urlShouldBeInvalid(str) {
-  const isValid = await UrlShortener.isValidUrl(str);
+  const isValid = await UrlShortener._isValidUrl(str);
   expect(isValid).toEqual(false);
 
 }
@@ -15,7 +15,7 @@ async function urlShouldBeInvalid(str) {
 test('Url with invalid domain should be invalid', () => {
   const invalidDomain = 'www.not-a-valid-domain-7iuiui232.com';
   expect.assertions(1);
-  return expect(UrlShortener.isValidUrl('http://' + invalidDomain)).resolves.toBe(false);
+  return expect(UrlShortener._isValidUrl('http://' + invalidDomain)).resolves.toBe(false);
 });
 
 
@@ -28,7 +28,7 @@ test('Url with valid format and domain should be valid', async () => {
 });
 
 async function urlShouldBeValid(str) {
-  const url = await UrlShortener.isValidUrl(str);
+  const url = await UrlShortener._isValidUrl(str);
   expect(url).toBe(true);
 }
 

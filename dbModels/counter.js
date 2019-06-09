@@ -16,11 +16,11 @@ counter.statics.getCountAndIncrease = function() {
     if (result) {
       return result.count;
     } else {
-      return initializeCount(this);
+      return _initializeCount(this);
     }
   }).catch(andThrowDbError);
 
-  function initializeCount(counterConstructor) {
+  function _initializeCount(counterConstructor) {
     const counter = new counterConstructor();
     return counter.save()
       .then(() => {
