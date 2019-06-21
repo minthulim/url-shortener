@@ -8,7 +8,7 @@ class UrlShortener {
       const url = UrlShortener._removeLastSlash(str);
       const existingKey = await ShortenUrls.findKeyByUrl(url);
 
-      if (existingKey) {
+      if (existingKey !== null) {
         return existingKey;
       } else {
         return await ShortenUrls.add(url);
