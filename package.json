@@ -31,6 +31,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "jest": "^24.8.0",
+    "mongodb-memory-server": "^5.1.5",
     "superagent": "^5.0.5",
     "supertest": "^4.0.2"
   }
