@@ -1,4 +1,4 @@
-const UrlShortener = require('../../entities/urlShortener');
+const {UrlShortener} = require('../urlShortener');
 
 test('Invalid format URL should be invalid', async () => {
   expect.assertions(2);
