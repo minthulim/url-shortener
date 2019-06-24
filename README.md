@@ -1,5 +1,6 @@
 # API Project: URL Shortener Microservice
-
+[![Build Status](https://img.shields.io/travis/com/min49/url-shortener.svg)](https://travis-ci.com/min49/url-shortener)
+[![codecov](https://img.shields.io/codecov/c/github/min49/url-shortener.svg)](https://codecov.io/gh/min49/url-shortener)
 
 ### User Stories
 
