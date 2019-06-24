@@ -1,21 +1,15 @@
 'use strict';
 
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const config = require('./config.js');
+const dbHelper = require('./dbHelper');
 const shorturlRouter = require('./routes/shorturl.route');
 
 const app = express();
 
-/** this project needs a db !! **/
-mongoose.connect(config.MONGODB_URI, {useNewUrlParser: true, dbName: config.MONGODB_DBNAME});
-mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', false);
-mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
+dbHelper.connect();
 app.use(cors());
 
 /** this project needs to parse POST bodies **/
