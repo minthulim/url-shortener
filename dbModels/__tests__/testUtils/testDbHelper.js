@@ -12,11 +12,16 @@ class TestDbHelper {
 
   async start() {
     const mongoUri = await this.mongoServer.getConnectionString();
-    const opts = {useNewUrlParser: true};
+    // set options before connecting, because connect is used with await.
+    // So, the options don't have effect if set after connecting.
+    const opts = {
+      useNewUrlParser: true,
+      useFindAndModify: false, // for deprecated error in mongoose
+      useCreateIndex: true
+    };
     await mongoose.connect(mongoUri, opts, (err) => {
       if (err) console.error(err);
     });
-    mongoose.set('useFindAndModify', false); // for deprecated error in mongoose
   }
 
   async stop() {
